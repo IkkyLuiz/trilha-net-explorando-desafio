@@ -1,64 +1,42 @@
+using System;
+using System.Collections.Generic;
 namespace DesafioProjetoHospedagem.Models
 {
     public class Reserva
     {
+        private const int QuantidadeDiasParaObterDesconto = 10;
+        private const decimal PorcentagemDesconto = 0.1M;
+
         public List<Pessoa> Hospedes { get; set; }
         public Suite Suite { get; set; }
         public int DiasReservados { get; set; }
 
         public Reserva() { }
 
-        public Reserva(int diasReservados)
-        {
-            DiasReservados = diasReservados;
-        }
+        public Reserva(int diasReservados) => DiasReservados = diasReservados;
 
         public void CadastrarHospedes(List<Pessoa> hospedes)
         {
-            public void CadastrarHospedes(List<Pessoa> hospedes)
+            if (Suite.Capacidade < hospedes.Count)
+                throw new ArgumentException("A quantidade de hóspedes não pode exceder a capacidade da suíte");
 
-        if (Suite.Capacidade >= hospedes.Count)
-        {
-        Hospedes = hospedes;
-        }
-        else
-        {
-        throw new Exception("Capacidade da suíte insuficiente para a quantidade de hóspedes.");
-        }
-}
-
+            Hospedes = hospedes;
         }
 
-        public void CadastrarSuite(Suite suite)
-        {
-            Suite = suite;
-        }
+        public void CadastrarSuite(Suite suite) => Suite = suite;
 
-        public int ObterQuantidadeHospedes()
-        {
-            public int ObterQuantidadeHospedes()
-{
-    return Hospedes.Count;
-}
-
-            return 0;
-        }
+        public int ObterQuantidadeHospedes() => Hospedes.Count;
 
         public decimal CalcularValorDiaria()
         {
-            // TODO: Retorna o valor da diária
-            // Cálculo: DiasReservados X Suite.ValorDiaria
-            // *IMPLEMENTE AQUI*
-            decimal valor = 0;
+            decimal valor = DiasReservados * Suite.ValorDiaria;
 
-            // Regra: Caso os dias reservados forem maior ou igual a 10, conceder um desconto de 10%
-            // *IMPLEMENTE AQUI*
-            if (true)
-            {
-                valor = 0;
-            }
+            if (ElegivelDesconto())
+                valor *= 1 - PorcentagemDesconto;
 
             return valor;
         }
+
+        private bool ElegivelDesconto() => DiasReservados >= QuantidadeDiasParaObterDesconto;
     }
 }
